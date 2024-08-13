@@ -615,6 +615,9 @@ class VtpReader:
         ]
 
         # process the compressed data
+        if num_blocks == 0:
+            return np.array([], dtype=dtype)
+
         block_data = np.concatenate(
             [
                 np.frombuffer(
@@ -695,7 +698,6 @@ def _chunk_it(array, n):
 
 
 def _format_polydata(mesh, type_list):
-
     # create connectivity, offset
     connectivity = []
     for cell_arr in mesh.cells:
@@ -882,7 +884,6 @@ def write(filename, mesh, binary=True, compression="zlib", header_type=None):
         numpy_to_xml_array(pts, "Points", points)
 
     if mesh.cells is not None and len(mesh.cells) > 0:
-
         poly_types = []
         for cell_arr in mesh.cells:
             if cell_arr.type == "vertex":
