@@ -50,9 +50,9 @@ all = [
 ]
 
 [project.urls]
-homepage = "https://github.com/nschloe/meshio"
-code = "https://github.com/nschloe/meshio"
-issues = "https://github.com/nschloe/meshio/issues"
+homepage = "https://github.com/finsberg/meshio"
+code = "https://github.com/finsberg/meshio"
+issues = "https://github.com/finsberg/meshio/issues"
 
 [project.entry-points.console_scripts]
 meshio = "meshio._cli:main"
@@ -63,3 +63,19 @@ profile = "black"
 # [options.data_files]
 # share/paraview-5.9/plugins =
 #     tools/paraview-meshio-plugin.py
+
+[tool.bumpversion]
+allow_dirty = false
+commit = true
+message = "Bump version: {current_version} → {new_version}"
+tag = true
+sign_tags = false
+tag_name = "v{new_version}"
+tag_message = "Bump version: {current_version} → {new_version}"
+current_version = "5.3.5"
+
+
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+search = 'version = "{current_version}"'
+replace = 'version = "{new_version}"'
