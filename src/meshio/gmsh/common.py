@@ -69,8 +69,10 @@ def _read_data(f, tag, data_dict, data_size, is_ascii):
         data = np.fromfile(f, count=num_items * (1 + num_components), sep=" ").reshape(
             (num_items, 1 + num_components)
         )
+
         # The first entry is the node number
         data = data[:, 1:]
+
     else:
         # binary
         dtype = [("index", c_int), ("values", c_double, (num_components,))]
@@ -167,16 +169,72 @@ def _gmsh_to_meshio_order(cell_type: str, idx: ArrayLike) -> np.ndarray:
         # fmt: off
         "tetra10": [0, 1, 2, 3, 4, 5, 6, 7, 9, 8],
         "hexahedron20": [
-            0, 1, 2, 3, 4, 5, 6, 7, 8, 11, 13,
-            9, 16, 18, 19, 17, 10, 12, 14, 15,
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            11,
+            13,
+            9,
+            16,
+            18,
+            19,
+            17,
+            10,
+            12,
+            14,
+            15,
         ],  # https://vtk.org/doc/release/4.2/html/classvtkQuadraticHexahedron.html and https://gmsh.info/doc/texinfo/gmsh.html#Node-ordering
         "hexahedron27": [
-            0, 1, 2, 3, 4, 5, 6, 7, 8, 11, 13,
-            9, 16, 18, 19, 17, 10, 12, 14, 15,
-            22, 23, 21, 24, 20, 25, 26,
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            11,
+            13,
+            9,
+            16,
+            18,
+            19,
+            17,
+            10,
+            12,
+            14,
+            15,
+            22,
+            23,
+            21,
+            24,
+            20,
+            25,
+            26,
         ],
         "wedge15": [
-            0, 1, 2, 3, 4, 5, 6, 9, 7, 12, 14, 13, 8, 10, 11
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            9,
+            7,
+            12,
+            14,
+            13,
+            8,
+            10,
+            11,
         ],  # http://davis.lbl.gov/Manuals/VTK-4.5/classvtkQuadraticWedge.html and https://gmsh.info/doc/texinfo/gmsh.html#Node-ordering
         "pyramid13": [0, 1, 2, 3, 4, 5, 8, 10, 6, 7, 9, 11, 12],
         # fmt: on
@@ -193,16 +251,72 @@ def _meshio_to_gmsh_order(cell_type: str, idx: ArrayLike) -> np.ndarray:
         # fmt: off
         "tetra10": [0, 1, 2, 3, 4, 5, 6, 7, 9, 8],
         "hexahedron20": [
-            0, 1, 2, 3, 4, 5, 6, 7, 8, 11, 16,
-            9, 17, 10, 18, 19, 12, 15, 13, 14,
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            11,
+            16,
+            9,
+            17,
+            10,
+            18,
+            19,
+            12,
+            15,
+            13,
+            14,
         ],
         "hexahedron27": [
-            0, 1, 2, 3, 4, 5, 6, 7, 8, 11, 16,
-            9, 17, 10, 18, 19, 12, 15, 13, 14,
-            24, 22, 20, 21, 23, 25, 26,
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            11,
+            16,
+            9,
+            17,
+            10,
+            18,
+            19,
+            12,
+            15,
+            13,
+            14,
+            24,
+            22,
+            20,
+            21,
+            23,
+            25,
+            26,
         ],
         "wedge15": [
-            0, 1, 2, 3, 4, 5, 6, 8, 12, 7, 13, 14, 9, 11, 10,
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            8,
+            12,
+            7,
+            13,
+            14,
+            9,
+            11,
+            10,
         ],
         "pyramid13": [0, 1, 2, 3, 4, 5, 8, 9, 6, 10, 7, 11, 12],
         # fmt: on
@@ -277,9 +391,18 @@ def _write_data(fh, tag, name, data, binary):
         # TODO unify
         if num_components == 1:
             for k, x in enumerate(data):
-                fh.write(fmt.format(k + 1, x).encode())
+                # breakpoint()
+                fh.write(fmt.format(k + 1, numpyfloat2float(x)).encode())
         else:
             for k, x in enumerate(data):
-                fh.write(fmt.format(k + 1, *x).encode())
+                # breakpoint()
+                fh.write(
+                    fmt.format(k + 1, *[numpyfloat2float(xi) for xi in x]).encode()
+                )
 
     fh.write(f"$End{tag}\n".encode())
+
+
+def numpyfloat2float(x):
+    if isinstance(x, np.float64):
+        return float(x)

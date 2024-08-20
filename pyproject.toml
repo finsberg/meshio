@@ -48,6 +48,12 @@ all = [
     "netCDF4",
     "h5py"  # CGNS, H5M, MED, XDMF formats
 ]
+test = [
+  "pytest",
+  "pytest-codeblocks >= 0.12.1",
+  "pytest-cov",
+  "meshio[all]",
+]
 
 [project.urls]
 homepage = "https://github.com/finsberg/meshio"
