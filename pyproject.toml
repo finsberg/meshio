@@ -3,7 +3,7 @@ requires = ["setuptools>=42", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "meshio"
+name = "meshio2"
 version = "5.3.6"
 description = "I/O for many mesh formats"
 readme = "README.md"
@@ -52,7 +52,7 @@ test = [
   "pytest",
   "pytest-codeblocks >= 0.12.1",
   "pytest-cov",
-  "meshio[all]",
+  "meshio2[all]",
 ]
 
 [project.urls]
