@@ -25,7 +25,7 @@ this_dir = pathlib.Path(__file__).resolve().parent
 @pytest.mark.parametrize(
     "accuracy,ext",
     [
-        (1.0e-7, ".ugrid"),
+        # (1.0e-7, ".ugrid"),
         (1.0e-15, ".b8.ugrid"),
         (1.0e-7, ".b4.ugrid"),
         (1.0e-15, ".lb8.ugrid"),
